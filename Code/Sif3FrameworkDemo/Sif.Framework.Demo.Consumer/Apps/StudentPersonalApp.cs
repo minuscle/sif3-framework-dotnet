@@ -18,6 +18,7 @@ using Microsoft.Extensions.Logging;
 using Sif.Framework.Demo.Consumer.Consumers;
 using Sif.Framework.Demo.Consumer.Models;
 using Sif.Framework.Demo.Consumer.Utils;
+using Sif.Framework.Models.Parameters;
 using Sif.Framework.Models.Responses;
 using Sif.Framework.Models.Settings;
 using Sif.Framework.Services.Sessions;
@@ -150,7 +151,9 @@ public class StudentPersonalApp
 
             try
             {
-                StudentPersonal retrievedNewStudent = consumer.Create(newStudent, true);
+                var requestParameter = new RequestParameter("generatorId", "james007", ConveyanceType.HttpHeader);
+                StudentPersonal retrievedNewStudent =
+                    consumer.Create(newStudent, true, requestParameters: requestParameter);
 
                 _logger.Information($"Created new student {newStudent.PersonInfo.Name.GivenName} {newStudent.PersonInfo.Name.FamilyName} with ID of {retrievedNewStudent.RefId}.");
             }

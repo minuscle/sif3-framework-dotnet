@@ -30,6 +30,7 @@ using Sif.Framework.Utils;
 using Sif.Specification.Infrastructure;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -139,6 +140,25 @@ namespace Sif.Framework.Consumers
         }
 
         /// <summary>
+        /// Extract the HTTP headers from the request parameters provided.
+        /// </summary>
+        /// <param name="requestParameters">Request parameters.</param>
+        /// <returns>A collection of HTTP headers if found; null otherwise.</returns>
+        private static NameValueCollection GetHeaderParameters(params RequestParameter[] requestParameters)
+        {
+            if (requestParameters == null) return null;
+
+            var headers = new NameValueCollection();
+
+            foreach (RequestParameter param in requestParameters.Where(m => m?.Type == ConveyanceType.HttpHeader))
+            {
+                headers.Add(param.Name, param.Value);
+            }
+
+            return headers;
+        }
+
+        /// <summary>
         /// Serialise a single object entity.
         /// </summary>
         /// <param name="obj">Payload of a single object.</param>
@@ -204,8 +224,11 @@ namespace Sif.Framework.Consumers
                 .Append(HttpUtils.MatrixParameters(zoneId, contextId))
                 .Append(GenerateQueryParameterString(requestParameters))
                 .ToString();
-            WebHeaderCollection responseHeaders =
-                HttpUtils.HeadRequest(url, RegistrationService.AuthorisationToken, ConsumerSettings.CompressPayload);
+            WebHeaderCollection responseHeaders = HttpUtils.HeadRequest(
+                url,
+                RegistrationService.AuthorisationToken,
+                ConsumerSettings.CompressPayload,
+                requestHeaders: GetHeaderParameters(requestParameters));
 
             return responseHeaders[ResponseParameterType.changesSinceMarker.ToDescription()];
         }
@@ -235,7 +258,8 @@ namespace Sif.Framework.Consumers
                 ConsumerSettings.CompressPayload,
                 contentTypeOverride: ContentType.ToDescription(),
                 acceptOverride: Accept.ToDescription(),
-                mustUseAdvisory: mustUseAdvisory);
+                mustUseAdvisory: mustUseAdvisory,
+                requestHeaders: GetHeaderParameters(requestParameters));
 
             if (_log.IsDebugEnabled) _log.Debug("Response from POST request ...");
             if (_log.IsDebugEnabled) _log.Debug(responseBody);
@@ -267,7 +291,8 @@ namespace Sif.Framework.Consumers
                 ConsumerSettings.CompressPayload,
                 contentTypeOverride: ContentType.ToDescription(),
                 acceptOverride: Accept.ToDescription(),
-                mustUseAdvisory: mustUseAdvisory);
+                mustUseAdvisory: mustUseAdvisory,
+                requestHeaders: GetHeaderParameters(requestParameters));
 
             if (_log.IsDebugEnabled) _log.Debug("Response from POST request ...");
             if (_log.IsDebugEnabled) _log.Debug(responseBody);
@@ -305,7 +330,8 @@ namespace Sif.Framework.Consumers
                     RegistrationService.AuthorisationToken,
                     ConsumerSettings.CompressPayload,
                     contentTypeOverride: ContentType.ToDescription(),
-                    acceptOverride: Accept.ToDescription());
+                    acceptOverride: Accept.ToDescription(),
+                    requestHeaders: GetHeaderParameters(requestParameters));
 
                 if (_log.IsDebugEnabled) _log.Debug("Response from GET request ...");
                 if (_log.IsDebugEnabled) _log.Debug(responseBody);
@@ -359,7 +385,8 @@ namespace Sif.Framework.Consumers
                     navigationPage: (int)navigationPage,
                     navigationPageSize: (int)navigationPageSize,
                     contentTypeOverride: ContentType.ToDescription(),
-                    acceptOverride: Accept.ToDescription());
+                    acceptOverride: Accept.ToDescription(),
+                    requestHeaders: GetHeaderParameters(requestParameters));
             }
             else
             {
@@ -368,7 +395,8 @@ namespace Sif.Framework.Consumers
                     RegistrationService.AuthorisationToken,
                     ConsumerSettings.CompressPayload,
                     contentTypeOverride: ContentType.ToDescription(),
-                    acceptOverride: Accept.ToDescription());
+                    acceptOverride: Accept.ToDescription(),
+                    requestHeaders: GetHeaderParameters(requestParameters));
             }
 
             return DeserialiseMultiple(responseBody);
@@ -400,7 +428,8 @@ namespace Sif.Framework.Consumers
                 ConsumerSettings.CompressPayload,
                 methodOverride: "GET",
                 contentTypeOverride: ContentType.ToDescription(),
-                acceptOverride: Accept.ToDescription());
+                acceptOverride: Accept.ToDescription(),
+                requestHeaders: GetHeaderParameters(requestParameters));
 
             if (_log.IsDebugEnabled) _log.Debug("Response from POST (Query by Example) request ...");
             if (_log.IsDebugEnabled) _log.Debug(responseBody);
@@ -450,7 +479,8 @@ namespace Sif.Framework.Consumers
                     (int)navigationPage,
                     (int)navigationPageSize,
                     ContentType.ToDescription(),
-                    Accept.ToDescription());
+                    Accept.ToDescription(),
+                    requestHeaders: GetHeaderParameters(requestParameters));
             }
             else
             {
@@ -460,7 +490,8 @@ namespace Sif.Framework.Consumers
                     ConsumerSettings.CompressPayload,
                     ServiceType.SERVICEPATH,
                     contentTypeOverride: ContentType.ToDescription(),
-                    acceptOverride: Accept.ToDescription());
+                    acceptOverride: Accept.ToDescription(),
+                    requestHeaders: GetHeaderParameters(requestParameters));
             }
 
             return DeserialiseMultiple(responseBody);
@@ -503,7 +534,8 @@ namespace Sif.Framework.Consumers
                     navigationPage: (int)navigationPage,
                     navigationPageSize: (int)navigationPageSize,
                     contentTypeOverride: ContentType.ToDescription(),
-                    acceptOverride: Accept.ToDescription());
+                    acceptOverride: Accept.ToDescription(),
+                    requestHeaders: GetHeaderParameters(requestParameters));
             }
             else
             {
@@ -513,7 +545,8 @@ namespace Sif.Framework.Consumers
                     ConsumerSettings.CompressPayload,
                     out responseHeaders,
                     contentTypeOverride: ContentType.ToDescription(),
-                    acceptOverride: Accept.ToDescription());
+                    acceptOverride: Accept.ToDescription(),
+                    requestHeaders: GetHeaderParameters(requestParameters));
             }
 
             nextChangesSinceMarker = responseHeaders[ResponseParameterType.changesSinceMarker.ToDescription()];
@@ -553,7 +586,8 @@ namespace Sif.Framework.Consumers
                     navigationPage: (int)navigationPage,
                     navigationPageSize: (int)navigationPageSize,
                     contentTypeOverride: ContentType.ToDescription(),
-                    acceptOverride: Accept.ToDescription());
+                    acceptOverride: Accept.ToDescription(),
+                    requestHeaders: GetHeaderParameters(requestParameters));
             }
             else
             {
@@ -562,7 +596,8 @@ namespace Sif.Framework.Consumers
                     RegistrationService.AuthorisationToken,
                     ConsumerSettings.CompressPayload,
                     contentTypeOverride: ContentType.ToDescription(),
-                    acceptOverride: Accept.ToDescription());
+                    acceptOverride: Accept.ToDescription(),
+                    requestHeaders: GetHeaderParameters(requestParameters));
             }
 
             return DeserialiseMultiple(responseBody);
@@ -591,7 +626,8 @@ namespace Sif.Framework.Consumers
                 requestBody,
                 ConsumerSettings.CompressPayload,
                 contentTypeOverride: ContentType.ToDescription(),
-                acceptOverride: Accept.ToDescription());
+                acceptOverride: Accept.ToDescription(),
+                requestHeaders: GetHeaderParameters(requestParameters));
 
             if (_log.IsDebugEnabled) _log.Debug("Response from PUT request ...");
             if (_log.IsDebugEnabled) _log.Debug(responseBody);
@@ -619,7 +655,8 @@ namespace Sif.Framework.Consumers
                 requestBody,
                 ConsumerSettings.CompressPayload,
                 contentTypeOverride: ContentType.ToDescription(),
-                acceptOverride: Accept.ToDescription());
+                acceptOverride: Accept.ToDescription(),
+                requestHeaders: GetHeaderParameters(requestParameters));
 
             if (_log.IsDebugEnabled) _log.Debug("Response from PUT request ...");
             if (_log.IsDebugEnabled) _log.Debug(responseBody);
@@ -653,7 +690,8 @@ namespace Sif.Framework.Consumers
                 RegistrationService.AuthorisationToken,
                 ConsumerSettings.CompressPayload,
                 contentTypeOverride: ContentType.ToDescription(),
-                acceptOverride: Accept.ToDescription());
+                acceptOverride: Accept.ToDescription(),
+                requestHeaders: GetHeaderParameters(requestParameters));
 
             if (_log.IsDebugEnabled) _log.Debug("Response from DELETE request ...");
             if (_log.IsDebugEnabled) _log.Debug(responseBody);
@@ -687,7 +725,8 @@ namespace Sif.Framework.Consumers
                 ConsumerSettings.CompressPayload,
                 methodOverride: "DELETE",
                 contentTypeOverride: ContentType.ToDescription(),
-                acceptOverride: Accept.ToDescription());
+                acceptOverride: Accept.ToDescription(),
+                requestHeaders: GetHeaderParameters(requestParameters));
 
             if (_log.IsDebugEnabled) _log.Debug("Response from PUT (DELETE) request ...");
             if (_log.IsDebugEnabled) _log.Debug(responseBody);

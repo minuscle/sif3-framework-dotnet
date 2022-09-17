@@ -36,6 +36,10 @@ For .NET 6 support, Visual Studio 2022 is required. The SIF Framework is current
 
 ## Version control history
 
+**Sept 17, 2022 - 6.1.0 Resolved HTTP headers issue**
+
+- Fixed an issue whereby HTTP headers were not being correctly passed as request parameters from Consumers to Providers.
+
 **Aug 25, 2022 - 6.0.0 Upgraded to support .NET 6 and Entity Framework Core**
 
 - GENERAL CHANGES

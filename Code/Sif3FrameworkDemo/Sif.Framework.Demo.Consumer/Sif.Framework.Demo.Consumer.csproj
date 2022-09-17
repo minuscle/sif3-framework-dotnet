@@ -23,7 +23,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.5" />
-    <PackageReference Include="Sif.Framework.EntityFrameworkCore" Version="1.0.0" />
+    <PackageReference Include="Sif.Framework.EntityFrameworkCore" Version="1.0.1" />
     <PackageReference Include="Sif.Specification.DataModel.Au" Version="3.4.8" />
   </ItemGroup>
 

@@ -73,7 +73,7 @@ public abstract class ObjectProvider<TSingle, TMultiple>
         }
 
         bool? mustUseAdvisory = Request.Headers.GetMustUseAdvisory();
-        RequestParameter[] requestParameters = Request.GetQueryParameters().ToArray();
+        RequestParameter[] requestParameters = Request.GetRequestParameters().ToArray();
         MultipleCreateResponse multipleCreateResponse = service.Create(
             obj,
             mustUseAdvisory,
@@ -104,7 +104,7 @@ public abstract class ObjectProvider<TSingle, TMultiple>
             return StatusCode(StatusCodes.Status403Forbidden);
         }
 
-        RequestParameter[] requestParameters = Request.GetQueryParameters().ToArray();
+        RequestParameter[] requestParameters = Request.GetRequestParameters().ToArray();
         MultipleUpdateResponse multipleUpdateResponse = service.Update(
             obj,
             zoneId,

@@ -160,7 +160,7 @@ public abstract class Provider<TSingle, TMultiple>
                 }
                 else
                 {
-                    RequestParameter[] requestParameters = Request.GetQueryParameters().ToArray();
+                    RequestParameter[] requestParameters = Request.GetRequestParameters().ToArray();
                     TSingle createdObject =
                         Service.Create(obj, mustUseAdvisory, zoneId, contextId, requestParameters);
                     result = CreatedAtAction(nameof(GetById), new { id = createdObject.RefId }, createdObject);
@@ -168,7 +168,7 @@ public abstract class Provider<TSingle, TMultiple>
             }
             else
             {
-                RequestParameter[] requestParameters = Request.GetQueryParameters().ToArray();
+                RequestParameter[] requestParameters = Request.GetRequestParameters().ToArray();
                 TSingle createdObject = Service.Create(obj, null, zoneId, contextId, requestParameters);
                 result = CreatedAtAction(nameof(GetById), new { id = createdObject.RefId }, createdObject);
             }
@@ -234,7 +234,7 @@ public abstract class Provider<TSingle, TMultiple>
 
         try
         {
-            RequestParameter[] requestParameters = Request.GetQueryParameters().ToArray();
+            RequestParameter[] requestParameters = Request.GetRequestParameters().ToArray();
             TSingle obj = Service.Retrieve(refId, zoneId, contextId, requestParameters);
 
             if (obj == null)
@@ -281,7 +281,7 @@ public abstract class Provider<TSingle, TMultiple>
 
         uint? navigationPage = Request.Headers.GetNavigationPage();
         uint? navigationPageSize = Request.Headers.GetNavigationPageSize();
-        RequestParameter[] requestParameters = Request.GetQueryParameters().ToArray();
+        RequestParameter[] requestParameters = Request.GetRequestParameters().ToArray();
         TMultiple items =
             Service.Retrieve(navigationPage, navigationPageSize, zoneId, contextId, requestParameters);
         IActionResult result;
@@ -327,7 +327,7 @@ public abstract class Provider<TSingle, TMultiple>
 
         uint? navigationPage = Request.Headers.GetNavigationPage();
         uint? navigationPageSize = Request.Headers.GetNavigationPageSize();
-        RequestParameter[] requestParameters = Request.GetQueryParameters().ToArray();
+        RequestParameter[] requestParameters = Request.GetRequestParameters().ToArray();
         TMultiple items = changesSinceService.RetrieveChangesSince(
             changesSinceMarker,
             navigationPage,
@@ -387,7 +387,7 @@ public abstract class Provider<TSingle, TMultiple>
 
         uint? navigationPage = Request.Headers.GetNavigationPage();
         uint? navigationPageSize = Request.Headers.GetNavigationPageSize();
-        RequestParameter[] requestParameters = Request.GetQueryParameters().ToArray();
+        RequestParameter[] requestParameters = Request.GetRequestParameters().ToArray();
         TMultiple items =
             Service.Retrieve(obj, navigationPage, navigationPageSize, zoneId, contextId, requestParameters);
         IActionResult result;
@@ -654,7 +654,7 @@ public abstract class Provider<TSingle, TMultiple>
 
         try
         {
-            RequestParameter[] requestParameters = Request.GetQueryParameters().ToArray();
+            RequestParameter[] requestParameters = Request.GetRequestParameters().ToArray();
             Service.Update(obj, zoneId, contextId, requestParameters);
             result = StatusCode(StatusCodes.Status204NoContent);
         }
@@ -703,7 +703,7 @@ public abstract class Provider<TSingle, TMultiple>
 
         try
         {
-            RequestParameter[] requestParameters = Request.GetQueryParameters().ToArray();
+            RequestParameter[] requestParameters = Request.GetRequestParameters().ToArray();
             Service.Delete(refId, zoneId, contextId, requestParameters);
             result = StatusCode(StatusCodes.Status204NoContent);
         }
@@ -758,7 +758,7 @@ public abstract class Provider<TSingle, TMultiple>
 
                 try
                 {
-                    RequestParameter[] requestParameters = Request.GetQueryParameters().ToArray();
+                    RequestParameter[] requestParameters = Request.GetRequestParameters().ToArray();
                     Service.Delete(deleteId.id, zoneId, contextId, requestParameters);
                     status.statusCode = StatusCodes.Status204NoContent.ToString();
                 }

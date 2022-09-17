@@ -26,12 +26,12 @@ namespace Sif.Framework.AspNetCore.Extensions;
 public static class HttpRequestExtension
 {
     /// <summary>
-    /// Get the query parameters associated with the HTTP Request.
+    /// Get the request parameters associated with the HTTP Request (specifically HTTP headers and query parameters).
     /// </summary>
     /// <param name="request">HTTP Request to check.</param>
-    /// <returns>Query Parameters associated with the http Request if found; an empty collection otherwise.</returns>
+    /// <returns>Request parameters associated with the HTTP Request if found; an empty collection otherwise.</returns>
     /// <exception cref="ArgumentNullException">Parameter is null.</exception>
-    public static IEnumerable<RequestParameter> GetQueryParameters(this HttpRequest request)
+    public static IEnumerable<RequestParameter> GetRequestParameters(this HttpRequest request)
     {
         if (request == null) throw new ArgumentNullException(nameof(request));
 
@@ -43,6 +43,12 @@ public static class HttpRequestExtension
                 value.Select(stringValue => new RequestParameter(key, stringValue, ConveyanceType.QueryParameter)));
         }
 
-        return requestParameters.ToArray();
+        foreach ((string? key, StringValues value) in request.Headers)
+        {
+            requestParameters.AddRange(
+                value.Select(stringValue => new RequestParameter(key, stringValue, ConveyanceType.HttpHeader)));
+        }
+
+        return requestParameters;
     }
 }
