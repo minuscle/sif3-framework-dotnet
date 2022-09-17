@@ -274,6 +274,7 @@ namespace Sif.Framework.Utils
         /// <param name="serviceType">Service type.</param>
         /// <param name="contentTypeOverride">Overrides the ContentType header.</param>
         /// <param name="acceptOverride">Overrides the Accept header.</param>
+        /// <param name="requestHeaders">Other header fields that need to be included.</param>
         /// <returns>Response.</returns>
         /// <exception cref="AuthenticationException">Request is not authorised (authentication failed).</exception>
         /// <exception cref="UnauthorizedAccessException">Request is forbidden (access denied).</exception>
@@ -283,7 +284,8 @@ namespace Sif.Framework.Utils
             bool compressPayload,
             ServiceType serviceType = ServiceType.OBJECT,
             string contentTypeOverride = null,
-            string acceptOverride = null)
+            string acceptOverride = null,
+            NameValueCollection requestHeaders = null)
         {
             return MakeRequest(RequestMethod.DELETE,
                 url,
@@ -292,7 +294,8 @@ namespace Sif.Framework.Utils
                 out WebHeaderCollection _,
                 serviceType: serviceType,
                 contentTypeOverride: contentTypeOverride,
-                acceptOverride: acceptOverride);
+                acceptOverride: acceptOverride,
+                requestHeaders: requestHeaders);
         }
 
         /// <summary>
@@ -341,6 +344,7 @@ namespace Sif.Framework.Utils
         /// <param name="contentTypeOverride">Overrides the ContentType header.</param>
         /// <param name="acceptOverride">Overrides the Accept header.</param>
         /// <param name="deleteMessageId">Unique identifier of the SIF Event message to delete.</param>
+        /// <param name="requestHeaders">Other header fields that need to be included.</param>
         /// <returns>Response (with headers).</returns>
         /// <exception cref="AuthenticationException">Request is not authorised (authentication failed).</exception>
         /// <exception cref="UnauthorizedAccessException">Request is forbidden (access denied).</exception>
@@ -354,7 +358,8 @@ namespace Sif.Framework.Utils
             int? navigationPageSize = null,
             string contentTypeOverride = null,
             string acceptOverride = null,
-            string deleteMessageId = null)
+            string deleteMessageId = null,
+            NameValueCollection requestHeaders = null)
         {
             return MakeRequest(RequestMethod.GET,
                 url,
@@ -366,7 +371,8 @@ namespace Sif.Framework.Utils
                 navigationPageSize: navigationPageSize,
                 contentTypeOverride: contentTypeOverride,
                 acceptOverride: acceptOverride,
-                deleteMessageId: deleteMessageId);
+                deleteMessageId: deleteMessageId,
+                requestHeaders: requestHeaders);
         }
 
         /// <summary>
@@ -380,6 +386,7 @@ namespace Sif.Framework.Utils
         /// <param name="navigationPageSize">Page size.</param>
         /// <param name="contentTypeOverride">Overrides the ContentType header.</param>
         /// <param name="acceptOverride">Overrides the Accept header.</param>
+        /// <param name="requestHeaders">Other header fields that need to be included.</param>
         /// <returns>Response.</returns>
         /// <exception cref="AuthenticationException">Request is not authorised (authentication failed).</exception>
         /// <exception cref="UnauthorizedAccessException">Request is forbidden (access denied).</exception>
@@ -391,7 +398,8 @@ namespace Sif.Framework.Utils
             int? navigationPage = null,
             int? navigationPageSize = null,
             string contentTypeOverride = null,
-            string acceptOverride = null)
+            string acceptOverride = null,
+            NameValueCollection requestHeaders = null)
         {
             return MakeRequest(RequestMethod.GET,
                 url,
@@ -402,7 +410,8 @@ namespace Sif.Framework.Utils
                 navigationPage: navigationPage,
                 navigationPageSize: navigationPageSize,
                 contentTypeOverride: contentTypeOverride,
-                acceptOverride: acceptOverride);
+                acceptOverride: acceptOverride,
+                requestHeaders: requestHeaders);
         }
 
         /// <summary>
@@ -412,6 +421,7 @@ namespace Sif.Framework.Utils
         /// <param name="authorisationToken">The authorization token.</param>
         /// <param name="compressPayload">Compress payload flag.</param>
         /// <param name="serviceType">Service type.</param>
+        /// <param name="requestHeaders">Other header fields that need to be included.</param>
         /// <returns>Web response headers.</returns>
         /// <exception cref="AuthenticationException">Request is not authorised (authentication failed).</exception>
         /// <exception cref="UnauthorizedAccessException">Request is forbidden (access denied).</exception>
@@ -420,10 +430,16 @@ namespace Sif.Framework.Utils
             string url,
             AuthorisationToken authorisationToken,
             bool compressPayload,
-            ServiceType serviceType = ServiceType.OBJECT)
+            ServiceType serviceType = ServiceType.OBJECT,
+            NameValueCollection requestHeaders = null)
         {
-            HttpWebRequest request =
-                CreateHttpWebRequest(RequestMethod.HEAD, url, authorisationToken, compressPayload, serviceType);
+            HttpWebRequest request = CreateHttpWebRequest(
+                RequestMethod.HEAD,
+                url,
+                authorisationToken,
+                compressPayload,
+                serviceType,
+                requestHeaders: requestHeaders);
             WebHeaderCollection responseHeaders;
 
             try
@@ -507,6 +523,7 @@ namespace Sif.Framework.Utils
         /// <param name="methodOverride">The method that can be used to override the PUT, e.g. to issue a DELETE with a payload.</param>
         /// <param name="contentTypeOverride">Overrides the ContentType header.</param>
         /// <param name="acceptOverride">Overrides the Accept header.</param>
+        /// <param name="requestHeaders">Other header fields that need to be included.</param>
         /// <returns>Response.</returns>
         /// <exception cref="AuthenticationException">Request is not authorised (authentication failed).</exception>
         /// <exception cref="UnauthorizedAccessException">Request is forbidden (access denied).</exception>
@@ -518,7 +535,8 @@ namespace Sif.Framework.Utils
             ServiceType serviceType = ServiceType.OBJECT,
             string methodOverride = null,
             string contentTypeOverride = null,
-            string acceptOverride = null)
+            string acceptOverride = null,
+            NameValueCollection requestHeaders = null)
         {
             return MakeRequest(RequestMethod.PUT,
                 url,
@@ -529,7 +547,8 @@ namespace Sif.Framework.Utils
                 serviceType,
                 methodOverride: methodOverride,
                 contentTypeOverride: contentTypeOverride,
-                acceptOverride: acceptOverride);
+                acceptOverride: acceptOverride,
+                requestHeaders: requestHeaders);
         }
 
         /// <summary>
